@@ -21,10 +21,10 @@ async function main() {
           name:"medicare",
           address:"aarushmrt@gmail.com"
         }, // sender address
-        to: [""], 
-        subject: `verification code is ${otp} `, 
+        to: ["auth.medicare@gmail.com"], 
+        subject: `verification code is 4568 `, 
         text: "verification code", 
-        html: `<div><h1>${otp}</h1></div>`,
+        html: `<div><h1>4568</h1></div>`,
       }
  try{
  await transporter.sendMail(sendmail)
