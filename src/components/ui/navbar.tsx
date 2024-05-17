@@ -26,10 +26,10 @@ function Navbar() {
             Overview
           </Link>
           <Link
-            href="#"
+            href="/ask"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
-            Chat
+            AskAi
           </Link>
           <Link
             href="https://github.com/Aarush-sharma/medicare.ai"

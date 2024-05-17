@@ -1,85 +1,104 @@
 "use client";
+
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Icons } from "./icons";
+import axios from "axios"
+import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
-  email: z.string().min(2, {
-    message: "email must be at least 2 characters.",
-  }),
-});
-let Email: string;
-
-export function ProfileForm() {
+export default function AuthenticationPage() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setemail] = useState("");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-    },
-  });
-
-  // 2. Define a submit handler.
-  async function onSubmit(value: z.infer<typeof formSchema>) {
-    setemail(value.email);
-    setIsLoading(true);
-   
-    setTimeout(() => {
-      setIsLoading(false);
-      
-    }, 3000);
-  }
-  Email = email;
   
+  const { toast } = useToast()
+  const router = useRouter();
+  async function onSubmit() {
+    setIsLoading(true)
+    router.push("/sign-up/otp")
+    try{
+      const res = await axios.get("/api/auth/otp",{
+        params:{
+          email:email,
+        }
+    })
+    console.log(res.data)
+    setIsLoading(false)
+    toast({
+      title: "otp sent succesfully",
+    })
+    } catch (err){
+      console.log(err)
+    }
+  };
   return (
-    <div className="grid gap-6">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="name@example.com" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <Button className="w-full" disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Sign Up with Email
-          </Button>
-        </form>
-      </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
+    <>
+      <div className="flex w-full h-screen justify-center items-center ">
+        <div className="border border-[hsl(240 3.7% 15.9%)] rounded-xl px-5 py-1">
+          <div className="lg:p-8 ">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-1 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Create an account
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Enter your email below to create your account
+                </p>
+              </div>
+              <div className="grid gap-6">
+                
+                  <form
+                    className="space-y-8"
+                  >
+                    <Input type="text" onChange={(e)=>setemail(e.target.value)} placeholder="name@example.com" />
+                   
+                    <Button type="submit" className="w-full" onClick={onSubmit} disabled={isLoading}>
+                      {isLoading && (
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Sign Up with Email
+                    </Button>
+                  </form>
+               
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <Button variant="outline" type="button" disabled={isLoading}>
+                  {isLoading ? (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Icons.google className="mr-2 h-4 w-4" />
+                  )}{" "}
+                  Google
+                </Button>
+              </div>
+              <div className="flex justify-center ">
+                <p className=" pt-1">Already have a account?</p>
+                <Link
+                  href="/log-in"
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "relative"
+                  )}
+                >
+                  Login
+                </Link>
+              </div>
+             </div>
+          </div>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
-        Google
-      </Button>
-    </div>
+    </>
   );
 }
-
-export {Email}
