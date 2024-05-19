@@ -1,33 +1,17 @@
 
 import React from 'react'
-// import {
-//     InputOTP,
-//     InputOTPGroup,
-//     InputOTPSeparator,
-//     InputOTPSlot,
-//   } from "@/components/ui/input-otp";
+
 import { InputOTPForm } from '@/components/otp-input';
 function Page() {
   return (
     <>
       <div className='w-full h-screen flex justify-center items-center'>
+        <div className='border border-[hsl(240 3.7% 15.9%)] rounded-xl px-5 py-5'>
         <InputOTPForm/>
+        </div>
     </div>
     </>
   );
 }
 
 export default Page;
-/**
- <InputOTP maxLength={4}>
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-      </InputOTPGroup>
-      <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-      </InputOTPGroup>
-    </InputOTP>
- */

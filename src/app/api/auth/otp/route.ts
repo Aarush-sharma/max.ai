@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendEmail } from "../nodemailer-config";
+import { sendEmail } from "../../nodemailer-config";
 
 export async function GET(req:NextRequest,){
     const url = new URL(req.url)

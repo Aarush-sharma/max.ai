@@ -1,5 +1,5 @@
 
-import AuthenticationPage from '@/components/ui/auth-form'
+import AuthenticationPage from '@/components/auth-form'
 
 
 function Authform() {

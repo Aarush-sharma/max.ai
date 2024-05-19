@@ -20,7 +20,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { toast } from "@/components/ui/use-toast";
+
 import { useToast } from "@/components/ui/use-toast";
 import { useCookies } from "next-client-cookies";
 import { useState } from "react";
@@ -73,7 +73,7 @@ export function InputOTPForm() {
       toast({
         title: "account created successfully",
         action: (
-          <ToastAction altText="back to home"><Link href="/">Go Back</Link></ToastAction>
+          <ToastAction altText="back to home"><a href="/">Go Back</a></ToastAction>
         ),
       })
       cookies.remove("email")
@@ -86,16 +86,18 @@ export function InputOTPForm() {
   return (
     <>
       {isVerified ? (
-        <div className="w-full h-screen flex justify-center items-center">
+        <div className="">
           <Input
             type="text"
+            
             onChange={(e) => setusername(e.target.value)}
             placeholder="john_doe"
           />
           <Input
             type="password"
+            className="my-4"
             onChange={(e) => setpassword(e.target.value)}
-            placeholder="123456789"
+            placeholder="create password"
           />
 
           <Button type="submit" className="w-full" disabled={isLoading} onClick={onSubmit}>
@@ -110,7 +112,7 @@ export function InputOTPForm() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(verify)}
-              className="w-2/3 space-y-6"
+              className=" space-y-6 "
             >
               <FormField
                 control={form.control}

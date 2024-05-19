@@ -1,12 +1,12 @@
 import prisma from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 import { inputChecker } from "@/lib/types"; 
-import { ADMIN_JWT_SECRET } from "../post/route"; // change this with env
+import { ADMIN_JWT_SECRET } from "../post/route";
 import * as jwt from "jsonwebtoken"
 
 //set loged when error comes return something add ur logic
 export async function GET(req:NextRequest){
-    
+
     const data = new URL(req.url)
     const email =  data.searchParams.get("email") as string;
     const password = data.searchParams.get("password") as string;
@@ -24,7 +24,7 @@ export async function GET(req:NextRequest){
             username:true,
             password:true
         }
-      });        
+      });
       console.log("user is ",user);
       if(token&&user){
         jwt.verify(token,ADMIN_JWT_SECRET);
@@ -38,13 +38,12 @@ export async function GET(req:NextRequest){
         httpOnly:true
       })
       return res;
-      }   else{
+      } else{
         return NextResponse.json({msg:"user not found"})
-      } 
-     return NextResponse.json({msg:"loged in succesfully"})
-                       
+      }
+     return NextResponse.json({msg:"loged in succesfully"});
     }catch(Err){
-    return NextResponse.json({msg:"incorrect pass or user not found"})
+    return NextResponse.json({msg:"incorrect pass or user not found"});
     }
   }else{ 
   return NextResponse.json({msg:"invalid input type"})
