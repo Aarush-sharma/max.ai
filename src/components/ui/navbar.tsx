@@ -1,16 +1,36 @@
-import { Button } from "./button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./dropdown-menu"
-import { ModeToggle } from "@/components/ui/themetoggler";
-import Link from "next/link"
-import { CircleUser, Menu, Package2, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { buttonVariants } from "@/components/ui/button"
+"use client";
 
+import { Button } from "./button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+import { ModeToggle } from "@/components/ui/themetoggler";
+import Link from "next/link";
+import { CircleUser, Menu, Package2, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { buttonVariants } from "@/components/ui/button";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { PresetActions } from "@/components/ui/chat-ui/preset-actions";
 function Navbar() {
+  const pathname = usePathname();
+  const [SettingOption, setSttingOption] = useState(false);
+  const urlCheck = () => {
+    if (pathname.includes("/ask")) {
+      setSttingOption(true);
+    } else {
+      setSttingOption(false);
+    }
+  };
   return (
-    <div >
-        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <div>
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             href="#"
@@ -20,14 +40,16 @@ function Navbar() {
             <span className="sr-only">Acme Inc</span>
           </Link>
           <Link
-            href="#"
+            href="/"
             className="text-muted-foreground transition-colors hover:text-foreground"
+            onClick={urlCheck}
           >
             Overview
           </Link>
           <Link
             href="/ask"
             className="text-muted-foreground transition-colors hover:text-foreground"
+            onClick={urlCheck}
           >
             AskAi
           </Link>
@@ -106,29 +128,43 @@ function Navbar() {
               />
             </div>
           </form>
-          <Link href="/log-in" className={buttonVariants({ variant: "outline" })}>Log in</Link>
+          <Link
+            href="/log-in"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            Log in
+          </Link>
 
           <ModeToggle></ModeToggle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+          {!SettingOption ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="rounded-full"
+                >
+                  <CircleUser className="h-5 w-5" />
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <PresetActions />
+          )}
         </div>
       </header>
     </div>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

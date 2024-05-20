@@ -2,9 +2,8 @@
 import Navbar from "@/components/ui/navbar";
 export default function Home() {
   return (
-    <div>
-      <Navbar></Navbar>
-    
+    <div className=" w-full">
+      
     </div>
   );
 }

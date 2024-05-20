@@ -1,8 +1,8 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
-
-const openai = new OpenAI({apiKey:"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"});
+import {} from 'dotenv/config'
+const openai = new OpenAI({apiKey:process.env.OPENAI_API_KEY});
 
 export async function GET(req:NextApiRequest,res:NextApiResponse) {
   //req.body.messages
