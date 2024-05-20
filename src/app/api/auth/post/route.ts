@@ -1,10 +1,10 @@
 import prisma from "@/db";
 import { inputChecker } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
-
+import {} from "dotenv/config"
 import * as jwt from "jsonwebtoken"
 
-export const ADMIN_JWT_SECRET = "hehe"
+
 
 export async function POST(req:NextRequest){
     const {username ,email,password}:{username:string,email:string,password:string}= await req.json()
@@ -34,7 +34,7 @@ export async function POST(req:NextRequest){
                 }
             })
             console.log(email,password,username)
-             const token = jwt.sign({email,password},ADMIN_JWT_SECRET)
+             const token = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
             const res = NextResponse.json({msg:"account created successfully"})
             res.cookies.set({
                 name:"token",

@@ -1,9 +1,8 @@
 import prisma from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 import { inputChecker } from "@/lib/types"; 
-import { ADMIN_JWT_SECRET } from "../post/route";
 import * as jwt from "jsonwebtoken"
-
+import {} from "dotenv/config"
 
 export async function GET(req:NextRequest){
 
@@ -27,10 +26,10 @@ export async function GET(req:NextRequest){
       });
       console.log("user is ",user);
       if(token&&user){
-        jwt.verify(token,ADMIN_JWT_SECRET);
+        jwt.verify(token,process.env.ADMIN_JWT_SECRET!);
      }else if(!token&&user){
       const res = NextResponse.json({msg:"loged in succesfully"})
-      const newtoken = jwt.sign({email,password},ADMIN_JWT_SECRET)
+      const newtoken = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
       res.cookies.set({
         name:"token",
         value:newtoken,
