@@ -51,7 +51,7 @@ export default function LoginForm() {
       });
       setIsLoading(false)
     }
-    //add loading animation on btn check funtionality proceed to make a new user try sign up and log in if works fine move to chat api
+  
   }
   return (
     <div className="w-full h-screen flex justify-center items-center">

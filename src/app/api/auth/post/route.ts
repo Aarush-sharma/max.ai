@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import * as jwt from "jsonwebtoken"
 
-//hv to set cookies 
 export const ADMIN_JWT_SECRET = "hehe"
 
 export async function POST(req:NextRequest){
@@ -54,21 +53,3 @@ export async function POST(req:NextRequest){
     }
         return NextResponse.json({msg:"user already exixts or type issue"})
     }
-    
-    /**
-      res.cookies.set( {
-      name:"token",
-      value:email,
-      maxAge:60*60*24*7,
-        httpOnly: true,
-      });
-        
-    const tokenValue = req.cookies.get("token");
-    
-   return NextResponse.json({msh:tokenValue})
-     */
-
-   //DELETE FROM "user";
-  
-
-// user will send email on otp route it send the otp if otp is correct otp route return yes if return yes take usernam and password in diffrwnt form and email from local strage and send to post route 

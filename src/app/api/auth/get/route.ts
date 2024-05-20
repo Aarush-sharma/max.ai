@@ -4,7 +4,7 @@ import { inputChecker } from "@/lib/types";
 import { ADMIN_JWT_SECRET } from "../post/route";
 import * as jwt from "jsonwebtoken"
 
-//set loged when error comes return something add ur logic
+
 export async function GET(req:NextRequest){
 
     const data = new URL(req.url)
@@ -49,14 +49,3 @@ export async function GET(req:NextRequest){
   return NextResponse.json({msg:"invalid input type"})
   }
 }
-/* const {email}:{email:string}=await res.json()
-    const resp = NextResponse.json({msg:"hallo"});
-    resp.cookies.set({
-        name:"token",
-        value:email,
-        maxAge: 60*60*24*7,
-        httpOnly:true
-    })
-    const token = res.cookies.get("token")?.value
-    console.log(token)
-return resp; */

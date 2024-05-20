@@ -12,4 +12,4 @@ export async function GET(req:NextRequest,){
     const a = otp.toString();
     res.cookies.set("otp",a);
     return res;
-} // improve ui in signup implement log in commit in each
+} 
