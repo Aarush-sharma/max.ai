@@ -4,13 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import {} from "dotenv/config"
 import * as jwt from "jsonwebtoken"
 
-
-
 export async function POST(req:NextRequest){
     const {username ,email,password}:{username:string,email:string,password:string}= await req.json()
     const validUser = await inputChecker({username,email,password});
-   
-    
 
     const existingUser = await prisma.user.findFirst({
         where:{
@@ -18,8 +14,7 @@ export async function POST(req:NextRequest){
         }
     });
     if(validUser&&!existingUser){
-      
-       
+
         try{
             const user = await prisma.user.create({
                 data:{
@@ -34,8 +29,10 @@ export async function POST(req:NextRequest){
                 }
             })
             console.log(email,password,username)
-             const token = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
+
+            const token = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
             const res = NextResponse.json({msg:"account created successfully"})
+
             res.cookies.set({
                 name:"token",
                 value:token,
@@ -43,13 +40,11 @@ export async function POST(req:NextRequest){
                 httpOnly:true
             });
              console.log(token)
-            // const pass = res.cookies.get("token")?.value
-            // console.log(pass)
             return res;
+
         }catch(err){
           return NextResponse.json({err})
         }
-         
     }
         return NextResponse.json({msg:"user already exixts or type issue"})
     }
