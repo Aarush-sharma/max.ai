@@ -17,7 +17,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { PresetActions } from "@/components/ui/chat-ui/preset-actions";
+
 function Navbar() {
   const pathname = usePathname();
   const [SettingOption, setSttingOption] = useState(false);
@@ -159,7 +159,7 @@ function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <PresetActions />
+            <div>hi</div>
           )}
         </div>
       </header>
