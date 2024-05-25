@@ -36,6 +36,7 @@ export async function GET(req:NextRequest){
         maxAge: 60*60*24*7,
         httpOnly:true
       })
+      res.cookies.set({name:"username",value:user.username})
       return res;
       } else{
         return NextResponse.json({msg:"user not found"})

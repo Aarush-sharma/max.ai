@@ -1,14 +1,11 @@
-import Chat from "@/components/ui/chat";
+import Chat from "@/components/chat";
 import { Metadata } from "next";
 
-
 export const metadata: Metadata = {
-  title: "Playground",
-  description: "The OpenAI Playground built using the components.",
+  title: "Ask Ai",
+  description: "The AI Playground built using the components.",
 };
 
-export default function Page(){
-  return(
-    <Chat/>
-  )
+export default function Page() {
+  return <Chat />;
 }

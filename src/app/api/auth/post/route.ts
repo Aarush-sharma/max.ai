@@ -32,12 +32,12 @@ export async function POST(req:NextRequest){
 
             const token = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
             const res = NextResponse.json({msg:"account created successfully"})
-
+            res.cookies.set({name:"username",value:username})
             res.cookies.set({
                 name:"token",
                 value:token,
                 maxAge: 60*60*24*7,
-                httpOnly:true
+                httpOnly:true,
             });
              console.log(token)
             return res;
