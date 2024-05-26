@@ -6,12 +6,29 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-model user{
-  id Int @id @default(autoincrement())
-  username String 
-  email String @unique
+model user {
+  id       Int      @id @default(autoincrement())
+  username String
+  email    String   @unique
   password String
+  chats    chats[]
+}
+
+model chats {
+  id       Int       @id @default(autoincrement())
+  user_id  Int
+  title    String  @unique
+  user     user      @relation(fields: [user_id], references: [id])
+  messages messages[]
+}
+
+model messages {
+  id        Int     @id @default(autoincrement())
+  role      String
+  content   String
+  chat_id   Int
+  chat      chats   @relation(fields: [chat_id], references: [id])
 }
