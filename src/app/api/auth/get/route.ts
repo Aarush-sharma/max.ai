@@ -37,6 +37,7 @@ export async function GET(req:NextRequest){
         httpOnly:true
       })
       res.cookies.set({name:"username",value:user.username})
+      res.cookies.set({name:"email",value:email})
       return res;
       } else{
         return NextResponse.json({msg:"user not found"})

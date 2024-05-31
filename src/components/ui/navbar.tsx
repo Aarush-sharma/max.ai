@@ -15,19 +15,9 @@ import { CircleUser, Menu, Package2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
 
 function Navbar() {
-  const pathname = usePathname();
-  const [SettingOption, setSttingOption] = useState(false);
-  const urlCheck = () => {
-    if (pathname.includes("/ask")) {
-      setSttingOption(true);
-    } else {
-      setSttingOption(false);
-    }
-  };
+  
   return (
     <div>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -36,14 +26,13 @@ function Navbar() {
           <a
             href="/"
             className="text-muted-foreground transition-colors hover:text-foreground"
-            onClick={urlCheck}
           >
             Overview
           </a>
           <a
             href="/ask"
             className="text-muted-foreground transition-colors hover:text-foreground"
-            onClick={urlCheck}
+            
           >
             AskAi
           </a>
@@ -77,14 +66,12 @@ function Navbar() {
               <a
                 href="/"
                 className="text-muted-foreground transition-colors hover:text-foreground"
-                onClick={urlCheck}
               >
                 Overview
               </a>
               <a
                 href="/ask"
                 className="text-muted-foreground transition-colors hover:text-foreground"
-                onClick={urlCheck}
               >
                 AskAi
               </a>
@@ -118,10 +105,7 @@ function Navbar() {
           <a href="/log-in" className={buttonVariants({ variant: "outline" })}>
             Log in
           </a>
-
           <ModeToggle></ModeToggle>
-
-          {!SettingOption ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -142,9 +126,6 @@ function Navbar() {
                 <DropdownMenuItem>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <div>hi</div>
-          )}
         </div>
       </header>
     </div>

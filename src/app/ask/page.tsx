@@ -1,11 +1,17 @@
-import Chat from "@/components/chat";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Ask Ai",
-  description: "The AI Playground built using the components.",
-};
+
+import Chat from "@/components/chat";
+import Navbar from "@/components/ui/navbar";
+
 
 export default function Page() {
-  return <Chat />;
+  
+  return (
+    <>
+      <div className="hidden h-full flex-col md:flex">
+        <Navbar  />
+        <Chat />
+      </div>
+    </>
+  );
 }

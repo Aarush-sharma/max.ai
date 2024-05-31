@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
 try{
     const res = await prisma.chats.findFirst({
         where: {
-          // Assuming 'title' is a unique field in the 'chats' model
           title: title,
           user_id:user.id
         },
@@ -26,10 +25,16 @@ try{
           messages: true,
         },
       });
-    
-      return NextResponse.json(res?.messages)
+    const text = res?.messages;
+
+    const newMessage = text?.map(val => ({
+        role: val.role,
+        parts: [{ text: val.content }]
+    })) || [];
+
+    return NextResponse.json(newMessage)
 } catch(err){
-    return NextResponse.json("chat dont exist",{status:404})
+    return NextResponse.json(err,{status:404})
 }
     }else{
         return NextResponse.json("user not found",{status:404})

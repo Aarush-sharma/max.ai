@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
   const email = req.cookies.get("email")?.value as string;
 
   try {
-    // Find the user by email
     const user = await prisma.user.findFirst({
       where: {
         email: email,
