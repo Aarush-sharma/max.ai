@@ -17,7 +17,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
 
 function Navbar() {
-  
+  const router = ()=>{
+    window.location.href = "/account"
+  }
   return (
     <div>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -44,7 +46,7 @@ function Navbar() {
             Github
           </Link>
           <a
-            href="#"
+            href="/account"
             className="text-foreground transition-colors hover:text-foreground"
           >
             Settings
@@ -83,7 +85,7 @@ function Navbar() {
                 Github
               </Link>
               <a
-                href="#"
+                href="/account"
                 className="text-foreground transition-colors hover:text-foreground"
               >
                 Settings
@@ -91,18 +93,8 @@ function Navbar() {
             </div>
           </SheetContent>
         </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
-          <a href="/log-in" className={buttonVariants({ variant: "outline" })}>
+        <div className="flex w-full items-center gap-4 ml-auto md:gap-2 lg:gap-4">
+          <a href="/log-in" className={`${buttonVariants({ variant: "outline" })} ml-auto flex-1 sm:flex-initial`}>
             Log in
           </a>
           <ModeToggle></ModeToggle>
@@ -120,7 +112,7 @@ function Navbar() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem onClick={router}>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Logout</DropdownMenuItem>

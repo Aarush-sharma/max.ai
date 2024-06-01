@@ -4,7 +4,7 @@ import { CounterClockwiseClockIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Content } from "@google/generative-ai";
 import { Icons } from "@/components/ui/icons";
@@ -20,13 +20,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import prisma from "@/db";
+import "./ui/styles/scroll.css"
 import { useToast } from "./ui/use-toast";
 import { Input } from "./ui/input";
 import ChatTab from "./ui/chat-tab";
-const clearSymbols = (text: string): string => {
-  return text.replace(/\*\*/g, "").replace(/\n/g, "<br>");
-};
 
 export default function Chat() {
   const [value, setValue] = useState("");
@@ -40,13 +37,40 @@ export default function Chat() {
   const cookies = useCookies();
   const { toast } = useToast();
   const DialogClose = DialogPrimitive.Close;
+  const textRef = useRef<HTMLDivElement>(null);
+  const handleCopy = () => {
+    if (textRef.current) {
+      const textToCopy = textRef.current.innerText;
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          toast({
+            title: "Text copied to clipboard!",
+          });
+        })
+        .catch((err) => {
+          toast({
+            title: `Failed to copy text: ${err}`,
+          });
+        });
+    }
+  };
+  const clearSymbols = (text: string): string => {
+    return text
+      .replace(/\*\*/g, "")
+      .replace(/\n/g, "<br>")
+      .replace(
+        /```(.*?)```/g,
+        `<div  class=" bg-black mockup-code px-3">$1</div>`
+      );
+  };
 
-  const handleSubmit = async () => {
+  const createChatResponse = async () => {
     setIsLoading(true);
     setUsername(cookies.get("username") as string);
     const userMessage = { role: "user", parts: [{ text: value }] };
     setHistory([...history, userMessage]);
-
+    setValue("");
     try {
       const response = await axios.post("/api/chat", {
         prompt: value,
@@ -57,7 +81,6 @@ export default function Chat() {
 
       setHistory([...history, userMessage, modelMessage]);
       console.log(JSON.stringify(history));
-      setValue("");
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -70,7 +93,7 @@ export default function Chat() {
   };
   async function handleSave() {
     try {
-      const res = axios.post("/api/chat/create", {
+      axios.post("/api/chat/create", {
         title: title,
         history: history,
       });
@@ -92,19 +115,19 @@ export default function Chat() {
           email: email,
         },
       });
-      console.log(typeof(res.data));
+      console.log(typeof res.data);
       console.log(titles);
-      
-      if(typeof(res.data)==='string'){
-        return null
+
+      if (typeof res.data === "string") {
+        return null;
       }
       setTitles(res.data);
     };
     loadchats();
   }, [isLoading]);
-  const handleDeleteSavedChat = (index: number) => {
+  const handleDeleteSavedChat = (index: number,title:string) => {
     setIsFetching(true);
-    
+
     titles.splice(index, 1);
     try {
       axios.delete("api/chat/delete", {
@@ -116,12 +139,12 @@ export default function Chat() {
     } catch (err) {
       return null;
     }
-    setHistory([])
+    setHistory([]);
     setIsFetching(true);
   };
-  const handleRetreiveChat = async (title:string) => {
+  const handleRetreiveChat = async (title: string) => {
     setIsFetching(true);
-    setHistory([])
+    setHistory([]);
     const email = cookies.get("email") as string;
     try {
       const res = await axios.get("api/chat/get", {
@@ -139,6 +162,7 @@ export default function Chat() {
     }
     setIsFetching(false);
   };
+
   return (
     <Tabs defaultValue="complete" className="flex-1">
       <div className="container h-full py-6">
@@ -201,7 +225,7 @@ export default function Chat() {
           <div className="md:order-1">
             <TabsContent value="complete" className="mt-0 border-0 p-0">
               <div className="flex h-full flex-col space-y-4">
-                <div className="h-[68vh] border border-[hsl(240 3.7% 15.9%)] overflow-auto p-4 rounded-md">
+                <div className="h-[68vh] border border-[hsl(240 3.7% 15.9%)] invisible-scrollbar overflow-auto p-4 rounded-md">
                   {history.map((item, index) => (
                     <div
                       key={index}
@@ -211,20 +235,26 @@ export default function Chat() {
                           : "chat chat-start"
                       }`}
                     >
-                      <span className="chat-header mb-2 text-xs">
-                        {item.role === "user" ? username : "AI"}
-                      </span>
-                      <div
-                        className={`chat-bubble ${
-                          item.role === "user" ? "glass" : ""
-                        }`}
-                      >
+                      <div>
                         <div>
+                          <span className="chat-header mb-2 text-xs">
+                            {item.role === "user" ? username : "AI"}
+                          </span>
+                          <Button onClick={handleCopy}  variant="ghost">
+                            <Icons.copy></Icons.copy>
+                          </Button>
+                        </div>
+                        <div
+                          className={`chat-bubble ${
+                            item.role === "user" ? "glass" : ""
+                          }`}
+                        >
                           {item.parts.map((part: any, i: number) => (
-                            <p
+                            <div 
                               key={i}
+                              ref={textRef}
                               dangerouslySetInnerHTML={{ __html: part.text }}
-                            />
+                            ></div>
                           ))}
                         </div>
                       </div>
@@ -237,10 +267,10 @@ export default function Chat() {
                     onChange={(e) => setValue(e.target.value)}
                     value={value}
                     placeholder="Try 'Write a tagline for an ice cream shop'"
-                    className="min-h-[40px] flex-1 p-4 md:min-h-[70px] lg:min-h-[70px]"
+                    className="min-h-[40px] flex-1 p-4 md:min-h-[70px] lg:min-h-[70px] invisible-scrollbar"
                   />
                   <Button
-                    onClick={handleSubmit}
+                    onClick={createChatResponse}
                     disabled={isLoading}
                     variant={"ghost"}
                     className="absolute mt-5 mr-5"

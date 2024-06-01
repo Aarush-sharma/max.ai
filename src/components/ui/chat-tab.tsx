@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "./button";
 import { Icons } from "./icons";
 interface tab {
-  delete: (index: number) => void;
+  delete: (index: number, title: string) => void;
   getchats: (title: string) => void;
   title: string;
   isfetching: boolean;
@@ -11,7 +11,7 @@ interface tab {
 
 export default function ChatTab(props: tab) {
   const deletchats = () => {
-    props.delete(props.index);
+    props.delete(props.index,props.title)
   };
   const chatfetcher = ()=>{
     props.getchats(props.title)
