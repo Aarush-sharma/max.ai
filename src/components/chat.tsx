@@ -11,6 +11,7 @@ import { Icons } from "@/components/ui/icons";
 import { useCookies } from "next-client-cookies";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
+import * as jwt from "jsonwebtoken"
 import { ChatSkeleton } from "./ui/loader";
 import {
   Dialog,
@@ -25,19 +26,28 @@ import { useToast } from "./ui/use-toast";
 import { Input } from "./ui/input";
 import ChatTab from "./ui/chat-tab";
 
+export interface DecodedToken {
+  user_id: number;
+  email: string;
+  username: string;
+}
+
 export default function Chat() {
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<Content[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [titles, setTitles] = useState<string[]>([]);
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
   const cookies = useCookies();
   const { toast } = useToast();
   const DialogClose = DialogPrimitive.Close;
   const textRef = useRef<HTMLDivElement>(null);
+  const tokenCookie = cookies.get("token") as string 
+  const token = jwt.decode(tokenCookie) as DecodedToken
+
   const handleCopy = () => {
     if (textRef.current) {
       const textToCopy = textRef.current.innerText;
@@ -67,7 +77,7 @@ export default function Chat() {
 
   const createChatResponse = async () => {
     setIsLoading(true);
-    setUsername(cookies.get("username") as string);
+     setUsername(token.username);
     const userMessage = { role: "user", parts: [{ text: value }] };
     setHistory([...history, userMessage]);
     setValue("");
@@ -109,13 +119,14 @@ export default function Chat() {
   }
   useEffect(() => {
     const loadchats = async () => {
-      const email = cookies.get("email");
+      const email = token.email
+      
       const res = await axios.get("api/chat/title", {
         params: {
           email: email,
         },
       });
-      console.log(typeof res.data);
+      console.log( res.data);
       console.log(titles);
 
       if (typeof res.data === "string") {
@@ -145,7 +156,7 @@ export default function Chat() {
   const handleRetreiveChat = async (title: string) => {
     setIsFetching(true);
     setHistory([]);
-    const email = cookies.get("email") as string;
+    const email = token.email;
     try {
       const res = await axios.get("api/chat/get", {
         params: {
@@ -238,7 +249,7 @@ export default function Chat() {
                       <div>
                         <div>
                           <span className="chat-header mb-2 text-xs">
-                            {item.role === "user" ? username : "AI"}
+                            {item.role === "user" ? userName : "AI"}
                           </span>
                           <Button onClick={handleCopy}  variant="ghost">
                             <Icons.copy></Icons.copy>

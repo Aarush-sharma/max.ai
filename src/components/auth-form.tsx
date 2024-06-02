@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import React, { useState } from "react";
 import axios from "axios";
 import { Icons } from "@/components/ui/icons";
@@ -26,6 +23,7 @@ export default function AuthenticationPage() {
           email: email,
         },
       });
+      localStorage.setItem("email",email)
       console.log(res.data);
       setIsLoading(false);
       toast({

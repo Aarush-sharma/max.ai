@@ -3,6 +3,7 @@ import { inputChecker } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 import {} from "dotenv/config"
 import * as jwt from "jsonwebtoken"
+import * as bcrypt from "bcrypt"
 
 export async function POST(req:NextRequest){
     const {username ,email,password}:{username:string,email:string,password:string}= await req.json()
@@ -13,32 +14,28 @@ export async function POST(req:NextRequest){
             email:email,
         }
     });
-    if(validUser&&!existingUser){
-
+    if(validUser && !existingUser){
+        const hashedPassword = await bcrypt.hash(password,10)
         try{
             const user = await prisma.user.create({
                 data:{
                   username:username,
                   email:email,
-                  password:password
+                  password:hashedPassword
                 },
                 select:{ 
                     email:true, 
-                    password:true,
+                    id:true,
                     username:true
                 }
             })
-            console.log(email,password,username)
 
-            const token = jwt.sign({email,password},process.env.ADMIN_JWT_SECRET!)
+            const token = jwt.sign({user_id :user.id,email:email,username:username},process.env.ADMIN_JWT_SECRET!)
             const res = NextResponse.json({msg:"account created successfully"})
-            res.cookies.set({name:"username",value:username})
-            res.cookies.set({name:"email",value:email})
             res.cookies.set({
                 name:"token",
                 value:token,
                 maxAge: 60*60*24*7,
-                httpOnly:true,
             });
              console.log(token)
             return res;
@@ -47,5 +44,5 @@ export async function POST(req:NextRequest){
           return NextResponse.json({err})
         }
     }
-        return NextResponse.json({msg:"user already exixts or type issue"})
+        return NextResponse.json({msg:"user already exixts"})
     }

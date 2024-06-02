@@ -22,11 +22,8 @@ import {
 } from "@/components/ui/input-otp";
 
 import { useToast } from "@/components/ui/use-toast";
-import { useCookies } from "next-client-cookies";
 import { useState } from "react";
 import { ToastAction } from "./ui/toast";
-import Link from "next/link";
-
 
 const FormSchema = z.object({
   pin: z.string().min(4, {
@@ -39,8 +36,9 @@ export function InputOTPForm() {
   const [username, setusername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setisverified] = useState(false);
-  const cookies = useCookies();
+
   const { toast } = useToast();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -49,47 +47,50 @@ export function InputOTPForm() {
   });
 
   async function verify(data: z.infer<typeof FormSchema>) {
-    
-    const otp = cookies.get("otp") as string;
-    if (otp === data.pin) {
+    const res = await axios.get("/api/auth/otp", {
+      params: {
+        otp: data.pin,
+      },
+    });
+    console.log(res.data)
+    if (res.data === "verfied user") {
       setisverified(true);
     } else {
       toast({
-        title: "invalid otp"
+        title: "invalid otp",
       });
     }
   }
-  async function onSubmit(){
-    setIsLoading(true)
-    const email = cookies.get("email") as string;
-    try{
-        const res = await axios.post("/api/auth/post",{
-          username:username,
-          email:email,
-          password:password
-      })
-      console.log(res.data)
-      setIsLoading(false)
+  async function onSubmit() {
+    setIsLoading(true);
+    const email = localStorage.getItem("email") as string;
+    try {
+      const res = await axios.post("/api/auth/post", {
+        username: username,
+        email: email,
+        password: password,
+      });
+      console.log(res.data);
+      setIsLoading(false);
       toast({
         title: "account created successfully",
         action: (
-          <ToastAction altText="back to home"><a href="/">Go Back</a></ToastAction>
+          <ToastAction altText="back to home">
+            <a href="/">Go Back</a>
+          </ToastAction>
         ),
-      })
-      cookies.remove("email")
-      cookies.remove("otp")
-      } catch (err){
-        console.log(err)
-      }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
-  
+
   return (
     <>
       {isVerified ? (
         <div className="">
           <Input
             type="text"
-            
             onChange={(e) => setusername(e.target.value)}
             placeholder="john_doe"
           />
@@ -100,7 +101,12 @@ export function InputOTPForm() {
             placeholder="create password"
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading} onClick={onSubmit}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            onClick={onSubmit}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
@@ -110,10 +116,7 @@ export function InputOTPForm() {
       ) : (
         <>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(verify)}
-              className=" space-y-6 "
-            >
+            <form onSubmit={form.handleSubmit(verify)} className=" space-y-6 ">
               <FormField
                 control={form.control}
                 name="pin"

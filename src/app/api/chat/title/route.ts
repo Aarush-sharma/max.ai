@@ -1,17 +1,18 @@
 import prisma from "@/db";
 import { NextRequest, NextResponse } from "next/server";
-
+import * as jwt from "jsonwebtoken"
+import {}  from "dotenv/config"
+import { DecodedToken } from "@/components/chat";
 export async function GET(req: NextRequest) {
-    
 
-    const data = new URL(req.url)
-    const email =  data.searchParams.get("email") as string;
-
+    const tokenCookie =  req.cookies.get("token")?.value as string;
+    const token = jwt.verify(tokenCookie,process.env.ADMIN_JWT_SECRET!) as DecodedToken
+    console.log(token.email)
     try {
-        // Find user by email
+       
         const user = await prisma.user.findFirst({
             where: {
-                email: email,
+                email: token.email,
             },
             select: {
                 id: true,
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
         });
 
         if (user) {
-            // Find chat title by user ID
+            
             const chat = await prisma.chats.findFirst({
                 where: {
                     user_id: user.id,
@@ -30,18 +31,13 @@ export async function GET(req: NextRequest) {
             });
 
             if (chat?.title) {
-                // Return array of titles
+                
                 return NextResponse.json([chat.title]);
             }
-
-            // Chat title not found
             return NextResponse.json("Chat title not found for the user");
         }
-
-        // User not found
         return NextResponse.json("User not found");
     } catch (error) {
-        // Handle any unexpected errors
         return NextResponse.json(`Something went wrong`);
     }
 }

@@ -1,19 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
+import {}  from "dotenv/config"
+import * as jwt from "jsonwebtoken"
+import { DecodedToken } from "@/components/chat";
 
 export async function POST(req: NextRequest) {
   
   const { history, title }: { history: { role: string, parts: { text: string }[] }[], title: string } = await req.json();
-  const email = req.cookies.get("email")?.value as string;
+  const tokenCookie =  req.cookies.get("token")?.value as string;
+  const token = jwt.verify(tokenCookie,process.env.ADMIN_JWT_SECRET!) as DecodedToken
 
   try {
     const user = await prisma.user.findFirst({
       where: {
-        email: email,
-      },
+        email: token.email,
+        
+      },select:{
+        id:true,
+      }
     });
-
+  
     if (user) {
+      console.log("this is user id here",  user.id)
       const newChat = await prisma.chats.create({
         data: {
           title: title,
