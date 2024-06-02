@@ -127,12 +127,15 @@ export default function Chat() {
         },
       });
       console.log( res.data);
-      console.log(titles);
+      console.log(titles , titles.length);
 
       if (typeof res.data === "string") {
         return null;
       }
-      setTitles(res.data);
+      const data = res.data;
+      setTitles(data.map((value:any)=>{
+        titles.push(value.title);
+      }))
     };
     loadchats();
   }, [isLoading]);

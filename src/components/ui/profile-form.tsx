@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,9 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { Textarea } from "@/components/ui/textarea";
+import * as jwt from "jsonwebtoken";
+import { useCookies } from "next-client-cookies";
 import { toast } from "@/components/ui/use-toast";
+import { DecodedToken } from "../chat";
+import axios from "axios";
 
 const profileFormSchema = z.object({
   username: z
@@ -35,47 +36,31 @@ const profileFormSchema = z.object({
       required_error: "Please select an email to display.",
     })
     .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      })
-    )
-    .optional(),
 });
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
-
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
-};
-
 export function ProfileForm() {
+  const cookies = useCookies();
+  const tokenCookie = cookies.get("token") as string;
+  const token = jwt.decode(tokenCookie) as DecodedToken;
+  const defaultValues: Partial<ProfileFormValues> = {
+    username: token.username,
+    email: token.email,
+  };
+  type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  });
-
-  function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
+    const res = await axios.put("/api/auth/put", {
+      emailupdate: data.email,
+      usernameupdate: data.username,
+    });
     toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+      title: res.data.msg,
     });
   }
 
@@ -93,7 +78,7 @@ export function ProfileForm() {
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                pseudonym.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -105,8 +90,7 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              {/*  display the user email here */}
-              <Input></Input>
+              <Input {...field}></Input>
               <FormDescription>
                 You can manage verified email addresses in your{" "}
                 <Link href="/examples/forms">email settings</Link>.

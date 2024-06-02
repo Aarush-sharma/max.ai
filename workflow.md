@@ -1,9 +1,5 @@
 create home page
-auth compeletion with bycrypt
+add responsiveness
 default logo/pattern in chat div 
-add setting functionallity
-
-to fetch data from jwt :{
-    const {user_id} = jwt.verify("extracted cookien here",process.env.JWT_SECRET)
-}
-fix the otp post req 
+add setting functionallity 
+test complete functionality work on delete acc and title array in chat

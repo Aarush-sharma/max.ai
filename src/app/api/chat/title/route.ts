@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
         if (user) {
             
-            const chat = await prisma.chats.findFirst({
+            const chat = await prisma.chats.findMany({
                 where: {
                     user_id: user.id,
                 },
@@ -30,9 +30,8 @@ export async function GET(req: NextRequest) {
                 },
             });
 
-            if (chat?.title) {
-                
-                return NextResponse.json([chat.title]);
+            if (chat) {
+                return NextResponse.json(chat);
             }
             return NextResponse.json("Chat title not found for the user");
         }
