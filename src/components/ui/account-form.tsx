@@ -42,6 +42,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 const accountFormSchema = z.object({
   name: z
@@ -64,11 +65,12 @@ export function AccountForm() {
   const tokenCookie = cookies.get("token") as string;
   const token = jwt.decode(tokenCookie) as DecodedToken;
   const DialogClose = DialogPrimitive.Close;
+  const router = useRouter();
   const [password, setpassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const defaultValues: Partial<AccountFormValues> = {
-    name: token.username,
-    email: token.email,
+    name: token.username || "",
+    email: token.email || "",
   };
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -99,21 +101,20 @@ export function AccountForm() {
       title: "logged out successfully",
     });
   };
-  const handleDelete = async() =>{
+  const handleDelete = async () => {
     setIsLoading(true);
-    try{
+    try {
       const res = await axios.delete("/api/auth/delete");
-    window.location.href = "/";
-    toast({
-      title:res.data.msg
-    })
-    }catch(err){
+        window.location.href = "/";
+        cookies.remove("token");
+      
+    } catch (err) {
       toast({
-        title:"something went wrong"
-      })
+        title: "something went wrong",
+      });
     }
     setIsLoading(false);
-  }
+  };
   return (
     <Form {...form}>
       <form className="space-y-8">
@@ -206,7 +207,11 @@ export function AccountForm() {
                 variant={"outline"}
                 className=" text-red-800 hover:text-red-800"
               >
-                Delete account
+                {isLoading ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin"></Icons.spinner>
+                ) : (
+                  "Delete account"
+                )}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -219,7 +224,12 @@ export function AccountForm() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="text-red-800">Continue</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="text-red-800"
+                >
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

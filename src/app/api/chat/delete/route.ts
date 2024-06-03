@@ -29,7 +29,7 @@ export async function DELETE(req: NextRequest) {
             await prisma.chats.delete({
                 where: {
                     title: title,
-                    
+
                 },
             });
 

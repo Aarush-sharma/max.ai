@@ -24,8 +24,6 @@ export async function GET(req:NextRequest){
             id:true
         }
       });
-
-      console.log("user is ",user);
       if(user){
        const IsVerifiedPassword = await bcrypt.compare(password,user.password)
      

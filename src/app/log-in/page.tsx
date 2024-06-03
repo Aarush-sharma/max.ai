@@ -32,17 +32,17 @@ export default function LoginForm() {
           password: password,
         },
       });
-      if (res.data?.msg === "user not found") {
-        setIsLoading(false)
-        toast({
-          title: "user not found !!!",
-        });
-        console.log(res.data.msg)
-      } else {
+      if (res.data?.msg === "loged in succesfully") {
         toast({
           title: "logged in successfully",
         });
         window.location.href = "/";
+       
+      } else {
+        setIsLoading(false)
+        toast({
+          title: res.data.msg,
+        });
       }
       setIsLoading(false)
     } catch (err) {

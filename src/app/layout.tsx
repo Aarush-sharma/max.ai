@@ -25,7 +25,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="h-screen w-full">
+          <div className="h-screen overflow-hidden w-full">
            
             {children}
           </div>

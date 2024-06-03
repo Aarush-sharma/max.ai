@@ -70,15 +70,10 @@ export function InputOTPForm() {
         email: email,
         password: password,
       });
-      console.log(res.data);
+      window.location.href = "/"
       setIsLoading(false);
       toast({
         title: "account created successfully",
-        action: (
-          <ToastAction altText="back to home">
-            <a href="/">Go Back</a>
-          </ToastAction>
-        ),
       });
     } catch (err) {
       console.log(err);

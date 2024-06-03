@@ -117,27 +117,17 @@ export default function Chat() {
       });
     }
   }
-  useEffect(() => {
-    const loadchats = async () => {
-      const email = token.email
-      
+   useEffect(() => {
+    const loadChats = async () => {
+      const email = token.email;
       const res = await axios.get("api/chat/title", {
-        params: {
-          email: email,
-        },
+        params: { email: email },
       });
-      console.log( res.data);
-      console.log(titles , titles.length);
-
-      if (typeof res.data === "string") {
-        return null;
+      if (typeof res.data !== "string") {
+        setTitles(res.data.map((value: any) => value.title));
       }
-      const data = res.data;
-      setTitles(data.map((value:any)=>{
-        titles.push(value.title);
-      }))
     };
-    loadchats();
+    loadChats();
   }, [isLoading]);
   const handleDeleteSavedChat = (index: number,title:string) => {
     setIsFetching(true);
@@ -154,7 +144,7 @@ export default function Chat() {
       return null;
     }
     setHistory([]);
-    setIsFetching(true);
+    setIsFetching(false);
   };
   const handleRetreiveChat = async (title: string) => {
     setIsFetching(true);
@@ -252,7 +242,7 @@ export default function Chat() {
                       <div>
                         <div>
                           <span className="chat-header mb-2 text-xs">
-                            {item.role === "user" ? userName : "AI"}
+                            {item.role === "user" ? userName : "Max"}
                           </span>
                           <Button onClick={handleCopy}  variant="ghost">
                             <Icons.copy></Icons.copy>

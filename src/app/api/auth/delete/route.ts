@@ -39,21 +39,14 @@ export async function DELETE(req: NextRequest) {
                     user_id: token.user_id
                 }
             });
-
+        }
             await prisma.user.delete({
                 where: {
                     id: token.user_id
                 }
             });
-        } else {
-            return NextResponse.json({ msg: "Chats not found" }, { status: 404 });
-        }
-
-        const res = NextResponse.json({ msg: "Account deleted successfully" });
         
-        res.cookies.delete("token");
-
-        return res;
+        return  NextResponse.json({ msg: "Account deleted successfully" });
 
     } catch (err) {
         console.error(err);
