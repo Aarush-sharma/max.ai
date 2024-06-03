@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-
+import { CookiesProvider } from "next-client-cookies/server";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,19 +18,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-       <main>
-       <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="h-screen overflow-hidden w-full">
-           
-            {children}
-          </div>
-        </ThemeProvider>
-       </main>
+        <main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <CookiesProvider>
+              <div className="h-screen overflow-hidden w-full">{children}</div>
+            </CookiesProvider>
+          </ThemeProvider>
+        </main>
       </body>
     </html>
   );
