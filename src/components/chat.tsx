@@ -169,7 +169,7 @@ export default function Chat() {
 
   return (
     <Tabs defaultValue="complete" className="flex-1">
-      <div className="container h-full py-6">
+      <div className=" px-5 h-full py-6">
         <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_200px]">
           <div className="hidden flex-col space-y-4 sm:flex md:order-2 ">
             <div className="flex items-center justify-center w-full space-x-2 pr-5 ">
@@ -198,7 +198,7 @@ export default function Chat() {
                   </div>
                   <DialogClose>
                     <Button onClick={handleSave} className="gap-2">
-                      Submit
+                      Submit 
                       <Icons.submit></Icons.submit>
                     </Button>
                   </DialogClose>

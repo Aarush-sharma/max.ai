@@ -12,17 +12,17 @@ import {
 import { ModeToggle } from "@/components/ui/themetoggler";
 import Link from "next/link";
 import { CircleUser, Menu, Package2, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
 
 function Navbar() {
-  const router = ()=>{
-    window.location.href = "/account"
-  }
+  const pushclient = () => {
+    window.location.href = "/account";
+  };
   return (
-    <div className="w-full">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <>
+      <div className="w-full sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <div className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           {/* image will be here */}
           <a
@@ -34,7 +34,6 @@ function Navbar() {
           <a
             href="/ask"
             className="text-muted-foreground transition-colors hover:text-foreground"
-            
           >
             AskAi
           </a>
@@ -94,33 +93,34 @@ function Navbar() {
           </SheetContent>
         </Sheet>
         <div className="flex w-full items-center gap-4 ml-auto md:gap-2 lg:gap-4">
-          <a href="/log-in" className={`${buttonVariants({ variant: "outline" })} ml-auto flex-1 sm:flex-initial`}>
+          <a
+            href="/log-in"
+            className={`${buttonVariants({
+              variant: "outline",
+            })} ml-auto flex-1 sm:flex-initial`}
+          >
             Log in
           </a>
           <ModeToggle></ModeToggle>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <CircleUser className="h-5 w-5" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={router}>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon" className="rounded-full">
+                <CircleUser className="h-5 w-5" />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={pushclient}>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      </header>
-    </div>
+      </div>
+    </>
   );
 }
 
