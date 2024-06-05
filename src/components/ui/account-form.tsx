@@ -155,7 +155,7 @@ export function AccountForm() {
             </FormItem>
           )}
         />
-        <div className="flex gap-2">
+        <div className="flex gap-2 max-md:flex-col">
           <Dialog>
             <DialogTrigger asChild>
               <Button>

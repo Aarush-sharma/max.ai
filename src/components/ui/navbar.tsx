@@ -12,14 +12,28 @@ import {
 import { ModeToggle } from "@/components/ui/themetoggler";
 import Link from "next/link";
 import { CircleUser, Menu, Package2, Search } from "lucide-react";
-
+import { useCookies } from "next-client-cookies";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
+import { useToast } from "./use-toast";
 
-function Navbar() {
+interface nav {
+  children?:  React.JSX.Element,
+  
+}
+function Navbar(props:nav) {
+  const cookies = useCookies();
+  const {toast} = useToast();
   const pushclient = () => {
     window.location.href = "/account";
   };
+  const logout = () =>{
+ cookies.remove("token")
+ window.location.href = "/";
+ toast({
+  title:"successfully logged out"
+ })
+  }
   return (
     <>
       <div className="w-full sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -90,17 +104,18 @@ function Navbar() {
                 Settings
               </a>
             </div>
+            {props.children}
           </SheetContent>
         </Sheet>
         <div className="flex w-full items-center gap-4 ml-auto md:gap-2 lg:gap-4">
-          <a
+          <Link
             href="/log-in"
             className={`${buttonVariants({
               variant: "outline",
-            })} ml-auto flex-1 sm:flex-initial`}
+            })} ml-auto  flex-initial`}
           >
             Log in
-          </a>
+          </Link>
           <ModeToggle></ModeToggle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -115,7 +130,7 @@ function Navbar() {
               <DropdownMenuItem onClick={pushclient}>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
