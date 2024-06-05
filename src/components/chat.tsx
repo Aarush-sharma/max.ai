@@ -218,7 +218,7 @@ export default function Chat() {
                               <div
                                 key={i}
                                 ref={textRef}
-                                dangerouslySetInnerHTML={{ __html: part.text }}
+                                dangerouslySetInnerHTML={{ __html: part.text! }}
                               ></div>
                             ))}
                           </div>
