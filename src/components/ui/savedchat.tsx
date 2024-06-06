@@ -65,7 +65,7 @@ interface savedchat {
         variant="outline"
         title="Clear chat"
       >
-        <Icons.Archive />
+        <Icons.clear />
       </Button>
     </div>
     <div className="border border-[hsl(240 3.7% 15.9%)] h-[74vh] rounded-md">

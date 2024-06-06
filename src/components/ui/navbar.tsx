@@ -18,25 +18,25 @@ import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "./use-toast";
 
 interface nav {
-  children?:  React.JSX.Element,
-  
+  children?: React.JSX.Element;
+  className?: string;
 }
-function Navbar(props:nav) {
+function Navbar(props: nav) {
   const cookies = useCookies();
-  const {toast} = useToast();
+  const { toast } = useToast();
   const pushclient = () => {
     window.location.href = "/account";
   };
-  const logout = () =>{
- cookies.remove("token")
- window.location.href = "/";
- toast({
-  title:"successfully logged out"
- })
-  }
+  const logout = () => {
+    cookies.remove("token");
+    window.location.href = "/";
+    toast({
+      title: "successfully logged out",
+    });
+  };
   return (
     <>
-      <div className="w-full sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <div className="w-screen sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <div className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           {/* image will be here */}
           <a

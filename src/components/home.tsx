@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import Box from "./ui/box";
 import { Button } from "./ui/button";
 import { Icons } from "./ui/icons";
 import Link from "next/link";
 import "./ui/styles/scroll.css";
+
 export default function Main() {
   return (
-    <div className="App w-full h-full flex justify-start max-[400px]:justify-center">
-      <div className="mt-10 ml-7 flex max-[400px]:ml-2 ">
+    <div className="flex justify-start max-[400px]:justify-center">
+      <div className="mt-10 ml-7 flex max-[400px]:ml-2">
         <div>
-          <div className="mt-10 text-5xl max-[900px]:text-2xl max-sm:text-lg max-[400px]:text-sm flex flex-col justify-between gap-[5vh]">
+          <div className="mt-10 text-5xl max-[900px]:text-2xl max-sm:text-lg max-[400px]:text-sm flex flex-col max-[400px]:gap-3 justify-between gap-[5vh]">
             <div className="flex gap-4 max-[400px]:gap-2">
               <p className="font-barlow font-bold bg-gradient-to-b from-blue-400 to-blue-600 text-transparent bg-clip-text">
                 Max.AI
@@ -56,6 +56,8 @@ export default function Main() {
           </div>
         </div>
       </div>
+      
     </div>
+    
   );
 }

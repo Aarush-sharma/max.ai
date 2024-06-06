@@ -157,7 +157,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-full flex-col  md:flex">
+    <div className="h-full flex-col overflow-hidden  md:flex">
       <Navbar
         children={
           <SavedChatTab

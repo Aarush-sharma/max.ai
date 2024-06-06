@@ -3,7 +3,7 @@ import { AccountForm } from "@/components/ui/account-form"
 
 export default function SettingsAccountPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-hidden">
       <div>
         <h3 className="text-lg font-medium">Account</h3>
         <p className="text-sm text-muted-foreground">

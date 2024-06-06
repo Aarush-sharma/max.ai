@@ -11,7 +11,6 @@ export async function GET(req:NextRequest,){
     const otp = Math.floor(Math.random() * 9000) + 1000;
     map.set("otp",otp)
     sendEmail(otp,email)
-    
     return NextResponse.json("otp sent");
    } else{
     const otp = map.get("otp")
@@ -22,7 +21,6 @@ export async function GET(req:NextRequest,){
         map.delete("otp")
         return NextResponse.json("invalid otp")
      }
-   
     }
 } 
 
