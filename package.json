@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "docker:dev":"npx prisma generate  && next dev",
     "start": "next start",
     "lint": "next lint"
   },
