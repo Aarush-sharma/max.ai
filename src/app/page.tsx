@@ -4,7 +4,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 
 export default function Home() {
   return (
-    <div className="h-screen w-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden">
       <BackgroundBeams
         children={
           <div>
