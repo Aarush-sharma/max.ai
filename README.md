@@ -16,4 +16,11 @@ npm run dev
 bun dev
 ```
 
+or, using docker:
+
+```bash
+docker build -t <image-name> .
+docker run -d -p 3000:3000 <image-name>
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
